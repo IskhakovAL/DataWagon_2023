@@ -1,3 +1,4 @@
-from backend.views import debug, trains
+from .debug import router as debug_router
+from .trains import router as trains_router
 
-routers = [debug.router, trains.router]
+routers = [debug_router, trains_router]

@@ -14,13 +14,14 @@ services:
     volumes:
       - "./kafka_data:/kafka"
     environment:
+#      не забыть поставить на серваке перемнную PROJ_HOST, либо пробросить сюда другую переменную с IP
       - KAFKA_LISTENERS=INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9094
-      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:9092,OUTSIDE://localhost:9094
+      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:9092,OUTSIDE://$PROJ_HOST:9094
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_MESSAGE_MAX_BYTES=2000000
-      - KAFKA_CREATE_TOPICS="events:1:1"
+      - KAFKA_CREATE_TOPICS="trains_agg:1:1,trains_noagg:1:1"
     depends_on:
       - zookeeper
 
@@ -33,6 +34,46 @@ services:
       - .env
     ports:
       - "5435:5432"
+
+  redis:
+    image: redis
+    restart: unless-stopped
+    volumes:
+      - ./redis_data:/data
+    ports:
+      - "6379:6379"
+    depends_on:
+      - postgres
+
+  jobmanager:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    volumes:
+      - "./producer/pipe.py:/opt/flink/pipe.py"
+      - "./producer/.env:/opt/flink/.env"
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+
+
+  taskmanager:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile
+    command: taskmanager
+    scale: 1
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+    depends_on:
+      - jobmanager
 
   app:
     build:
