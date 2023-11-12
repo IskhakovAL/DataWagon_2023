@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 
-router = APIRouter(prefix="/debug")
+router = APIRouter(prefix="/api/debug")
 
 
 @router.get("/")

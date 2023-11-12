@@ -78,5 +78,4 @@ while True:
                 ]
             },
         )
-        time.sleep(random.randint(1, 2))
     row_offset = rows[-1][0] + 1

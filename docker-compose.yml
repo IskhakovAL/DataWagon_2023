@@ -86,6 +86,31 @@ services:
     volumes:
       - ./nginx_logs:/var/log/nginx
       - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./frontend/build:/var/www/app
+
+  producer:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile.producer
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - postgres
+
+  copycat:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile.copycat
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - postgres
+      - producer
+
 
   app:
     build:
@@ -95,6 +120,7 @@ services:
     env_file:
       - .env
     ports:
-      - "8080:8080"
+      - "8000:8000"
     depends_on:
       - postgres
+      - copycat

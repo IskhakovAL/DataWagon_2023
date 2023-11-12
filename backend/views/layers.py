@@ -7,7 +7,7 @@ from controllers.layer_controller import LayerController
 from dependencies.redis_con import get_redis
 
 
-router = APIRouter(prefix="/layers")
+router = APIRouter(prefix="/api/layers")
 layer_controller = LayerController()
 
 logger = Logger(__name__)

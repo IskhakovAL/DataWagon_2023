@@ -11,7 +11,7 @@ from controllers.train_controller import TrainController
 
 import asyncio
 
-router = APIRouter(prefix="/trains")
+router = APIRouter(prefix="/api/trains")
 
 logger = logging.Logger(__name__)
 
@@ -25,95 +25,8 @@ async def trains_ws(websocket: WebSocket, consumer: AIOKafkaConsumer = Depends(g
                 await websocket.send_json(
                     TrainController.parse_kafka_message(message.value)
                 )
-                # print(type(message.key))
-                # await websocket.send_json(message.value)
     except WebSocketDisconnect:
         pass
-
-
-@router.websocket('/test')
-async def train(websocket: WebSocket):
-    # a = [55.755793, 56.129014]
-    # b = [37.617134, 40.406373]
-    stations = [[55.9007, 49.2657],
-                [55.9328, 49.3115],
-                [55.9423, 49.3301],
-                [55.9678, 49.4205],
-                [55.9726, 49.4499],
-                [55.9942, 49.5078],
-                [56.0079, 49.5702],
-                [56.0102, 49.6138],
-                [56.0226, 49.6476],
-                [56.0417, 49.7305],
-                [56.0465, 49.7896],
-                [56.0566, 49.8224],
-                [56.0769, 49.8885]]
-
-    stations2 = [[55.9652, 48.4178],
-                 [56.0224, 48.3856],
-                 [56.0709, 48.3697],
-                 [56.1152, 48.352],
-                 [56.1564, 48.3237],
-                 [56.2191, 48.2484],
-                 [56.31, 48.2502],
-                 [56.3811, 48.2032],
-                 [56.443, 48.1248],
-                 [56.5117, 48.0502],
-                 [56.5539, 47.9872],
-                 [56.6217, 47.8799],
-                 [56.6254, 47.8523]]
-    await websocket.accept()
-    try:
-        while True:
-            for station1, station2 in zip(stations, stations2):
-                await websocket.send_json([{
-                    "train_index": "123",
-                    "carriage": [
-                        {
-                            "carriage_id": ["123", "123"],
-                            "station_from_id": ["123", "123"],
-                            "station_to_id": ["123", "123"],
-                        }
-                    ],
-                    "current_time": "202020202",
-                    "current_station_id": "123",
-                    "stations": [
-                        {
-                            "station_id": "123",
-                            "station_time": "2020202",
-                            "latitude": row[0],
-                            "longitude": row[1]
-                        } for row in stations
-                    ],
-                    "latitude": station1[0],
-                    "longitude": station1[1]
-                },
-                    {
-                        "train_index": "456",
-                        "carriage": [
-                            {
-                                "carriage_id": ["123", "123"],
-                                "station_from_id": ["123", "123"],
-                                "station_to_id": ["123", "123"],
-                            }
-                        ],
-                        "current_time": "202020202",
-                        "current_station_id": "123",
-                        "stations": [
-                            {
-                                "station_id": "123",
-                                "station_time": "2020202",
-                                "latitude": row[0],
-                                "longitude": row[1]
-                            } for row in stations2
-                        ],
-                        "latitude": station2[0],
-                        "longitude": station2[1]
-                    }]
-                )
-                await asyncio.sleep(random.randint(2, 3))
-    except Exception as e:
-        logger.error(str(e))
 
 
 @router.websocket('/amount')
@@ -140,22 +53,3 @@ async def trains_mult(websocket: WebSocket, redis_con: redis.Redis = Depends(get
     except Exception as e:
         logger.error(str(e))
 
-
-# @router.websocket('/hexbin')
-# async def trains_mult(websocket: WebSocket):
-#     await websocket.accept()
-#     try:
-#         with open('views/hex.json', 'rb') as file:
-#             polygons = json.loads(file.read())
-#
-#         colors = ["#519d34", "#98df95", "#2704ff", "#06069d", "#e3fe68", "#cc4185", "#e85185", "#69a441",
-#                   "#9082b6", "#45867d"]
-#
-#         while True:
-#             for i in range(len(polygons['features'])):
-#                 polygons['features'][i]['properties'].update({'color': random.choice(colors)})
-#
-#             await websocket.send_json(polygons)
-#             await asyncio.sleep(random.randint(2, 3))
-#     except Exception as e:
-#         logger.error(str(e))
