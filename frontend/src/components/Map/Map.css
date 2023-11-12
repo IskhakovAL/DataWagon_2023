@@ -53,6 +53,73 @@
   right: 50%;
 }
 
+.button-container {
+  display: flex;
+  column-gap: 4px;
+  justify-content: center;
+  position: absolute;
+  bottom: 20px;
+  left: calc(50% - 38px);
+  z-index: 11;
+}
+
+.map__button {
+  min-width: 36px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: white;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.07);
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform: background-color .3s ease-in-out;
+}
+
+.map__button:hover {
+  background-color: #f5f5f5;
+}
+
+.map__button:active {
+  background-color: #ebebeb;
+}
+
+.map__button_selected {
+  background-color: #FBB099;
+}
+
+.map__button_selected:hover {
+  background-color: #F27E59;
+}
+
+.map__button_left {
+  border-radius: 10px 0px 0px 10px;
+  background-image: url("../../images/hex-button.png");
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.map__button_right {
+  border-radius: 0px 10px 10px 0px;
+  background-image: url("../../images/regions-button.png");
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.map__button_left_selected {
+  background-image: url("../../images/hex-button-colored.png");
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.map__button_right_selected {
+  background-image: url("../../images/regions-button-colored.png");
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
 /*.map_polygonButton {*/
 /*  position: absolute;*/
 /*  bottom: 0;*/

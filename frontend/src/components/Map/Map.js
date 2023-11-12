@@ -13,8 +13,6 @@ import "leaflet/dist/leaflet.css";
 import "./Map.css";
 import Train from "../Train/Train";
 import useForceUpdateGeoJson from "./useForceUpdateGeoJson";
-import hexButton from "../../images/hb.svg";
-import polygonButton from "../../images/polygons.svg";
 
 const POSITION_CLASSES = {
   bottomleft: "leaflet-bottom leaflet-left",
@@ -107,8 +105,9 @@ function ReactControlExample({ data: trains, polygons, hexbin, handleTrainClick,
             <MapContainer
                 style={{ height: "100vh", zIndex: 1 }}
                 center={[55.8304, 49.0661]}
-                zoom={8}
-                scrollWheelZoom={false}
+                zoom={6}
+                scrollWheelZoom={true}
+                attributionControl={false}
             >
                 {Object.keys(polygons).length && isOpenPolygon ? <GeoJSON key={`polygon-${polygonsKey}`} attribution="&copy; credits due..." data={polygons} style={setColor} /> : null}
                 {Object.keys(hexbin).length && isOpenHex ? <GeoJSON key={`hexbin-${hexbinKey}`} attribution="&copy; credits due..." data={hexbin} style={setColor} /> : null}
@@ -121,11 +120,10 @@ function ReactControlExample({ data: trains, polygons, hexbin, handleTrainClick,
                     return <Train key={train.train_index} train={train} onClick={handleTrainClick} onOutsideClick={handleMapClick} />
                 })}
             </MapContainer>
-            <div className="svg_containerHex" onClick={handleToggleHex}>
-                <img className="map_hexButton" src={hexButton} alt="кнопка" />
-            </div>
-            <div className="svg_containerPolygon" onClick={handleTogglePolygon}>
-                <img className="map_polygonButton" src={polygonButton} alt="кнопка" />
+
+            <div className="button-container">
+              <button className={`map__button map__button_left ${isOpenHex ? "map__button_selected map__button_left_selected" : "" }`} type="button" onClick={handleToggleHex} />
+              <button className={`map__button map__button_right ${isOpenPolygon ? "map__button_selected map__button_right_selected" : "" }`} type="button" onClick={handleTogglePolygon} />
             </div>
         </>
 

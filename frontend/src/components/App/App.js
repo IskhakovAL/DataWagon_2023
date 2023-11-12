@@ -52,10 +52,10 @@ function App() {
         setPolygons(data);
     }, []);
 
-    useWebSocket(handleAmount, 'ws://94.103.89.174:8000/trains/amount');
-    useWebSocket(handleTrains, 'ws://94.103.89.174:8000/trains/test');
-    useWebSocket(handleHexbin, 'ws://94.103.89.174:8000/layers/hexbin');
-    useWebSocket(handlePolygons, 'ws://94.103.89.174:8000/layers/federals');
+    useWebSocket(handleAmount, 'ws://94.103.89.174:8000/api/trains/amount');
+    useWebSocket(handleTrains, 'ws://94.103.89.174:8000/api/trains/mult');
+    useWebSocket(handleHexbin, 'ws://94.103.89.174:8000/api/layers/hexbin');
+    useWebSocket(handlePolygons, 'ws://94.103.89.174:8000/api/layers/federals');
   return (
     <div className="app">
       <Header data={trains} quantity={quantity} onChangeFilter={handleChangeFilters} />

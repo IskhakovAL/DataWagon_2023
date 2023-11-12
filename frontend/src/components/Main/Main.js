@@ -6,6 +6,7 @@ import "./Main.css";
 import React, {useMemo, useState} from "react";
 import {useClickOutside} from "../../hooks/useClickOutside";
 import {MainContext} from "./context";
+import MessagePopup from "../MessagePopup/MessagePopup";
 
 function Main({data, polygons, hexbin}) {
   const [train, setTrain] = useState({});
@@ -33,12 +34,18 @@ function Main({data, polygons, hexbin}) {
         </MainContext.Provider>
         <div ref={ref}>
             <DataPopup
-                position="left"
-                isVisible={(Object.keys(train).length !== 0) ? true : false}
-                markup={ <TrainRoute train={train} /> }
+              position="left"
+              isVisible={(Object.keys(train).length !== 0) ? true : false}
+              markup={ <TrainRoute train={train} /> }
+            />
+            <DataPopup
+              position="right"
+              isVisible={(Object.keys(train).length !== 0) ? true : false}
+              markup={<TrainCarriages train={train} />}
             />
         </div>
-      {/* <DataPopup position="right" markup={<TrainCarriages />} /> */}
+        <MessagePopup top="110px" left="20px" title="Для начала работы" text="попробуйте нажать на поезд или настроить фильтры" />
+        <MessagePopup bottom="76px" left="50%" title="Слои карты" text="оцените загруженность путей по гексагонам и регионам" isTranslate="true" />
     </main>
   );
 }
