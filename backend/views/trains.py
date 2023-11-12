@@ -139,3 +139,23 @@ async def trains_mult(websocket: WebSocket, redis_con: redis.Redis = Depends(get
             await asyncio.sleep(random.randint(2, 3))
     except Exception as e:
         logger.error(str(e))
+
+
+# @router.websocket('/hexbin')
+# async def trains_mult(websocket: WebSocket):
+#     await websocket.accept()
+#     try:
+#         with open('views/hex.json', 'rb') as file:
+#             polygons = json.loads(file.read())
+#
+#         colors = ["#519d34", "#98df95", "#2704ff", "#06069d", "#e3fe68", "#cc4185", "#e85185", "#69a441",
+#                   "#9082b6", "#45867d"]
+#
+#         while True:
+#             for i in range(len(polygons['features'])):
+#                 polygons['features'][i]['properties'].update({'color': random.choice(colors)})
+#
+#             await websocket.send_json(polygons)
+#             await asyncio.sleep(random.randint(2, 3))
+#     except Exception as e:
+#         logger.error(str(e))

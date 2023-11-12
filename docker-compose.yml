@@ -40,6 +40,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./redis_data:/data
+      - ./container.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
     ports:
       - "6379:6379"
     depends_on:
@@ -74,6 +76,16 @@ services:
         taskmanager.numberOfTaskSlots: 2
     depends_on:
       - jobmanager
+
+  nginx:
+    image: nginx:1.19.0-alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx_logs:/var/log/nginx
+      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
 
   app:
     build:
